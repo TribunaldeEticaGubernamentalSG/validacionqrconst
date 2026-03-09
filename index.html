@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Verificación de Constancias – TEG</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, .12);
+      overflow: hidden
+    }
+
+    .header {
+      background: #1a3a5c;
+      padding: 20px;
+      text-align: center
+    }
+
+    .header h1 {
+      color: white;
+      font-size: 14px;
+      letter-spacing: .5px
+    }
+
+    .header p {
+      color: #aac4de;
+      font-size: 11px;
+      margin-top: 3px
+    }
+
+    #pantalla-carga .body {
+      padding: 36px 24px;
+      text-align: center
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #e0e0e0;
+      border-top-color: #1a3a5c;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 16px
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    #pantalla-carga h2 {
+      color: #1a3a5c;
+      font-size: 15px;
+      margin-bottom: 6px
+    }
+
+    #pantalla-carga p {
+      color: #888;
+      font-size: 12px
+    }
+
+    #pantalla-bienvenida .body {
+      padding: 32px 24px;
+      text-align: center
+    }
+
+    #pantalla-bienvenida .ico {
+      font-size: 44px;
+      margin-bottom: 12px
+    }
+
+    #pantalla-bienvenida h2 {
+      color: #1a3a5c;
+      font-size: 15px;
+      margin-bottom: 8px
+    }
+
+    #pantalla-bienvenida p {
+      color: #888;
+      font-size: 13px;
+      line-height: 1.6
+    }
+
+    .estado {
+      padding: 18px;
+      text-align: center;
+      border-bottom: 1px solid #eee
+    }
+
+    .estado .ico {
+      font-size: 44px
+    }
+
+    .estado h2 {
+      font-size: 17px;
+      margin-top: 6px
+    }
+
+    .estado p {
+      color: #666;
+      font-size: 12px;
+      margin-top: 4px
+    }
+
+    .valido {
+      background: #eafaf1
+    }
+
+    .valido h2 {
+      color: #27ae60
+    }
+
+    .observ {
+      background: #fef9e7
+    }
+
+    .observ h2 {
+      color: #e67e22
+    }
+
+    .noenc {
+      background: #fdecea
+    }
+
+    .noenc h2 {
+      color: #e74c3c
+    }
+
+    .vencida {
+      background: #f3e8ff
+    }
+
+    .vencida h2 {
+      color: #7c3aed
+    }
+
+    .datos {
+      padding: 16px 20px
+    }
+
+    .fila {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 13px
+    }
+
+    .fila:last-child {
+      border-bottom: none
+    }
+
+    .etiqueta {
+      color: #888;
+      min-width: 125px
+    }
+
+    .valor {
+      color: #222;
+      font-weight: 600;
+      text-align: right;
+      word-break: break-word;
+      max-width: 210px
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700
+    }
+
+    .verde {
+      background: #eafaf1;
+      color: #27ae60
+    }
+
+    .naranja {
+      background: #fef9e7;
+      color: #e67e22
+    }
+
+    .codigo {
+      font-family: monospace;
+      font-size: 12px;
+      background: #eef2f7;
+      color: #1a3a5c;
+      padding: 2px 7px;
+      border-radius: 4px
+    }
+
+    .footer {
+      background: #f8f9fa;
+      padding: 12px 20px;
+      text-align: center;
+      font-size: 10px;
+      color: #aaa;
+      border-top: 1px solid #eee
+    }
+
+    .hidden {
+      display: none !important
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card" id="pantalla-carga">
+    <div class="header">
+      <h1>TRIBUNAL DE ÉTICA GUBERNAMENTAL</h1>
+      <p>Sistema de Verificación de Constancias</p>
+    </div>
+    <div class="body">
+      <div class="spinner"></div>
+      <h2>Verificando constancia…</h2>
+      <p>Por favor espere.</p>
+    </div>
+  </div>
+
+  <div class="card hidden" id="pantalla-bienvenida">
+    <div class="header">
+      <h1>TRIBUNAL DE ÉTICA GUBERNAMENTAL</h1>
+      <p>Sistema de Verificación de Constancias</p>
+    </div>
+    <div class="body">
+      <div class="ico">🔍</div>
+      <h2>Sistema de Verificación Activo</h2>
+      <p>Escanee el código QR del documento oficial para verificar una constancia.</p>
+    </div>
+  </div>
+
+  <div class="card hidden" id="pantalla-resultado">
+    <div class="header">
+      <h1>TRIBUNAL DE ÉTICA GUBERNAMENTAL</h1>
+      <p>Sistema de Verificación de Constancias</p>
+    </div>
+    <div id="bloque-estado" class="estado"></div>
+    <div id="bloque-datos" class="datos"></div>
+    <div id="bloque-footer" class="footer"></div>
+  </div>
+
+  <script>
+    var _c = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J6b1dERFBkVHo2MFBCdkMxN1NGdF9RYnZZM0U0OTR4LWdaNVI5ZDlzX2hZeG1WN0FFci1fZmJSOFVKbEhaMDhZcE52QS9leGVj";
+    var APPS_SCRIPT_URL = atob(_c);
+
+    function recopilarHuellaDispositivo() {
+      var datos = {};
+      datos.ua = navigator.userAgent;
+      datos.idioma = navigator.language + "|" + (navigator.languages || []).join(",");
+      datos.tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      datos.pantalla = screen.width + "x" + screen.height + "x" + screen.colorDepth;
+      datos.viewport = window.innerWidth + "x" + window.innerHeight;
+      datos.cpu = navigator.hardwareConcurrency || "?";
+      datos.ram = navigator.deviceMemory || "?";
+      datos.plataforma = navigator.platform || "?";
+      datos.touch = navigator.maxTouchPoints || 0;
+      datos.conexion = (navigator.connection || {}).effectiveType || "?";
+
+      try {
+        var c = document.createElement("canvas");
+        var ctx = c.getContext("2d");
+        ctx.textBaseline = "top"; ctx.font = "14px Arial";
+        ctx.fillStyle = "#1a3a5c"; ctx.fillRect(0, 0, 100, 30);
+        ctx.fillStyle = "#f0f4f8"; ctx.fillText("TEG-FP-2026", 2, 2);
+        ctx.fillStyle = "rgba(200,50,100,0.5)"; ctx.fillText("TEG-FP-2026", 4, 4);
+        datos.canvas = c.toDataURL().slice(-50);
+      } catch (e) { datos.canvas = "blocked"; }
+
+      try {
+        var gl = document.createElement("canvas").getContext("webgl")
+          || document.createElement("canvas").getContext("experimental-webgl");
+        if (gl) {
+          var ext = gl.getExtension("WEBGL_debug_renderer_info");
+          datos.gpu_vendor = ext ? gl.getParameter(ext.UNMASKED_VENDOR_WEBGL) : "?";
+          datos.gpu_renderer = ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : "?";
+        }
+      } catch (e) { datos.gpu_renderer = "blocked"; }
+
+      var str = JSON.stringify(datos), hash = 0;
+      for (var i = 0; i < str.length; i++) {
+        var chr = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr; hash |= 0;
+      }
+      var fp = ("00000000" + Math.abs(hash).toString(16).toUpperCase()).slice(-8);
+      return { fingerprint: fp, detalles: datos };
+    }
+
+    function mostrar(id) {
+      ["pantalla-carga", "pantalla-bienvenida", "pantalla-resultado"]
+        .forEach(function (p) {
+          document.getElementById(p).classList.toggle("hidden", p !== id);
+        });
+    }
+    function fila(etiqueta, valor) {
+      return '<div class="fila"><span class="etiqueta">' + etiqueta + '</span>'
+        + '<span class="valor">' + valor + '</span></div>';
+    }
+    function badge(texto, esPositivo) {
+      return '<span class="badge ' + (esPositivo ? "naranja" : "verde") + '">' + texto + '</span>';
+    }
+    function fechaHoy() {
+      var hoy = new Date();
+      var m = ["enero", "febrero", "marzo", "abril", "mayo", "junio",
+        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+      return hoy.getDate() + " de " + m[hoy.getMonth()] + " de " + hoy.getFullYear();
+    }
+
+    function renderResultado(d) {
+      var limpio = d.res_sancion.indexOf("Neg") !== -1 && d.res_proceso.indexOf("Neg") !== -1;
+      var estado = document.getElementById("bloque-estado");
+      estado.className = "estado " + (limpio ? "valido" : "observ");
+      estado.innerHTML =
+        '<div class="ico">' + (limpio ? "✅" : "⚠️") + '</div>'
+        + '<h2>' + (limpio ? "CONSTANCIA VÁLIDA" : "CONSTANCIA CON OBSERVACIONES") + '</h2>'
+        + '<p>Este documento fue emitido oficialmente por el TEG</p>';
+      var inst = (d.institucion && d.institucion !== "—")
+        ? '<br><small style="color:#888;font-weight:400">' + d.institucion + '</small>' : "";
+      document.getElementById("bloque-datos").innerHTML =
+        fila("Código", '<span class="codigo">' + d.codigo + '</span>') +
+        fila("Titular", d.nombre) +
+        fila("Documento", d.dui) +
+        fila("Fecha emisión", d.fecha) +
+        fila("Trámite", d.tramite + inst) +
+        fila("Sanciones", badge(
+          d.res_sancion.indexOf("Neg") !== -1 ? "Ninguna registrada" : "Registra sanciones",
+          d.res_sancion.indexOf("Neg") === -1
+        )) +
+        fila("Procedimientos", badge(
+          d.res_proceso.indexOf("Neg") !== -1 ? "Ninguno registrado" : "Registra procesos",
+          d.res_proceso.indexOf("Neg") === -1
+        ));
+      document.getElementById("bloque-footer").textContent =
+        "Verificado el " + fechaHoy() + " · Tribunal de Ética Gubernamental · República de El Salvador";
+      mostrar("pantalla-resultado");
+    }
+    function renderVencida(diasVencida) {
+      var estado = document.getElementById("bloque-estado");
+      estado.className = "estado vencida";
+      estado.innerHTML =
+        '<div class="ico">⏰</div><h2>CONSTANCIA VENCIDA</h2>'
+        + '<p>Esta constancia superó su vigencia de 90 días'
+        + (diasVencida ? ' (venció hace ' + diasVencida + ' días)' : '') + '.<br>'
+        + 'Solicite una nueva constancia al TEG.</p>';
+      document.getElementById("bloque-datos").innerHTML = "";
+      document.getElementById("bloque-footer").textContent = "";
+      mostrar("pantalla-resultado");
+    }
+    function renderNoEncontrado() {
+      var estado = document.getElementById("bloque-estado");
+      estado.className = "estado noenc";
+      estado.innerHTML =
+        '<div class="ico">❌</div><h2>CONSTANCIA NO VÁLIDA</h2>'
+        + '<p>Este documento no pudo ser verificado en los registros del Tribunal.</p>';
+      document.getElementById("bloque-datos").innerHTML =
+        '<p style="padding:16px;color:#888;font-size:13px;text-align:center">'
+        + 'Comuníquese directamente con el TEG para verificar.</p>';
+      document.getElementById("bloque-footer").textContent = "";
+      mostrar("pantalla-resultado");
+    }
+
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var v = (params.get("v") || "").trim().toUpperCase();
+      if (!v) { mostrar("pantalla-bienvenida"); return; }
+
+      var huella = recopilarHuellaDispositivo();
+      var payload = {
+        v: v,
+        fp: huella.fingerprint,
+        ua: huella.detalles.ua,
+        tz: huella.detalles.tz,
+        idioma: huella.detalles.idioma,
+        pantalla: huella.detalles.pantalla,
+        gpu: huella.detalles.gpu_renderer || "?",
+        cpu: huella.detalles.cpu,
+        ram: huella.detalles.ram,
+        plataforma: huella.detalles.plataforma,
+        canvas: huella.detalles.canvas,
+        conexion: huella.detalles.conexion,
+        timestamp: new Date().toISOString(),
+      };
+
+      var qs = Object.keys(payload).map(function (k) {
+        return encodeURIComponent(k) + "=" + encodeURIComponent(payload[k]);
+      }).join("&");
+
+      fetch(APPS_SCRIPT_URL + "?" + qs)
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data.encontrado) renderResultado(data.fila);
+          else if (data.vencida) renderVencida(data.diasVencida || 0);
+          else renderNoEncontrado();
+        })
+        .catch(function () { renderNoEncontrado(); });
+    })();
+  </script>
+</body>
+
+</html>
